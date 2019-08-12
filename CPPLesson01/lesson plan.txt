@@ -1,6 +1,7 @@
 Create a C++ actor class
 Explaing header and cpp files.
 add UE_LOG to BeginPlay
+Show displaying location in UE_LOG. (using FString)
 Try on Tick
 
 Show SetActorLocation() 
