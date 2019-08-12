@@ -1,0 +1,27 @@
+Create a C++ actor class
+Explaing header and cpp files.
+add UE_LOG to BeginPlay
+Try on Tick
+
+Show SetActorLocation() 
+Try SetActorLocation() on Tick so that actor drifts to the air.
+
+Show the C++ actor added as Blueprint actor.
+Show UProperty. (EditAnywhere, VisibleAnywhere, EditDefaultsOny (with category))
+
+Using the above show how to add explosion effect to projectile.
+
+C++
+-----------
+Projectile header file
+--------------------------------------------
+UPROPERTY(EditDefaultsOnly, Category = "FX")
+UParticleSystem* ExplosionEffect;
+Forward declaration required.
+class UParticleSystem;
+
+
+Projectile cpp file
+---------------------------------------------
+Add headerfile GameplayStatics.h
+UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ExplosionEffect, GetActorLocation());
