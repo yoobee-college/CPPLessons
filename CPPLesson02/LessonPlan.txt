@@ -1,0 +1,75 @@
+Show the finished project
+Create a c++ class for pickup object (Actor class)
+Create a blueprint class of the same by adding a blueprint class.
+If you add to world you cannot see. No visual representation. You can add in blueprint window. But we will add through c++
+
+So
+in the header file add following to protected
+
+UPROPERTY(VisibleAnyWhere, Category = "Component")
+UStaticMeshComponent* MeshComp;
+
+UPROPERTY(VisibleAnyWhere, Category = "Component")
+USphereComponent* SphereComp;
+
+UPROPERTY(EditDefaultsOnly, Category = "Effects")
+UParticleSystem* PicksupFX;
+
+forward decleration required for USphereComponent. So add "class USphereComponent;" at start.
+effects visible only in class defaults. Look for static mesh and sphere compnents
+
+Now to cpp file
+add following to the constructor of cpp file
+
+MeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComp"));
+RootComponent = MeshComp;
+SphereComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
+SphereComp->SetupAttachment(MeshComp);
+
+need to include following
+#include "Components/SphereComponent.h"
+#include "Components/StaticMeshComponent.h"
+
+and go to unreal to see change to fpsobjective class. Add a sphere to the static mesh.
+
+next adding collision to spherecomponent and disable collision in static mesh in cpp
+change the script to the following
+
+MeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComp"));
+MeshComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+RootComponent = MeshComp;
+SphereComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
+SphereComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+SphereComp->SetCollisionResponseToAllChannels(ECR_Ignore);
+SphereComp->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap );
+SphereComp->SetupAttachment(MeshComp);
+
+Collision should be working
+Now for particle effect when colliding.
+
+Create function in header file
+void PlayEffects();
+
+Goto implementation in cpp file
+add #include "Kismet/GameplayStatics.h"
+
+add PlayEffects(); to begin play
+add implementation as below.
+void AFPSObjectiveActor::PlayEffects()
+{
+	UGameplayStatics::SpawnEmitterAtLocation(this, PicksupFX, GetActorLocation());
+}
+
+We should be able to get the effects in editor. (pick a particle effect in class defaults)
+
+So see the particle effect when player overlap the actor
+add following method decleration to header file (can comment out the playeffect() in beginplay method)
+virtual void NotifyActorBeginOverlap(AActor* OtherActor);
+
+then add following defenition to cpp file.
+void AFPSObjectiveActor::NotifyActorBeginOverlap(AActor* OtherActor)
+{
+	Super::NotifyActorBeginOverlap(OtherActor);
+	PlayEffects();
+}
+
