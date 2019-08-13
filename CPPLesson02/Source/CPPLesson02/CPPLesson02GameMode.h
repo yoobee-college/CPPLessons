@@ -1,0 +1,19 @@
+// Copyright 1998-2019 Epic Games, Inc. All Rights Reserved.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "GameFramework/GameModeBase.h"
+#include "CPPLesson02GameMode.generated.h"
+
+UCLASS(minimalapi)
+class ACPPLesson02GameMode : public AGameModeBase
+{
+	GENERATED_BODY()
+
+public:
+	ACPPLesson02GameMode();
+};
+
+
+
