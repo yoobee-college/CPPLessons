@@ -34,4 +34,5 @@ Set the GameMode in world settings
 
 In the widget create bind display add different text based on the boolean variable in player character.
 
-
+Exercise:
+Add points to the player and collect points on overlapping the FPSObjective.
