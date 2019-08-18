@@ -1,7 +1,8 @@
 Show the finished project
 Create a c++ class for pickup object (Actor class)
 Create a blueprint class of the same by adding a blueprint class.
-If you add to world you cannot see. No visual representation. You can add in blueprint window. But we will add through c++
+If you add to world you cannot see. No visual representation. 
+You can add components in blueprint window. But we will add through c++
 
 So
 in the header file add following to protected
@@ -45,7 +46,7 @@ SphereComp->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap );
 SphereComp->SetupAttachment(MeshComp);
 
 Collision should be working
-Now for particle effect when colliding.
+Now how to add particle effect when colliding.
 
 Create function in header file
 void PlayEffects();
@@ -55,16 +56,18 @@ add #include "Kismet/GameplayStatics.h"
 
 add PlayEffects(); to begin play
 add implementation as below.
-void AFPSObjectiveActor::PlayEffects()
-{
-	UGameplayStatics::SpawnEmitterAtLocation(this, PicksupFX, GetActorLocation());
-}
+
+	void AFPSObjectiveActor::PlayEffects()
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(this, PicksupFX, GetActorLocation());
+	}
 
 We should be able to get the effects in editor. (pick a particle effect in class defaults)
 
 So see the particle effect when player overlap the actor
 add following method decleration to header file (can comment out the playeffect() in beginplay method)
-virtual void NotifyActorBeginOverlap(AActor* OtherActor);
+	
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor);
 
 then add following defenition to cpp file.
 void AFPSObjectiveActor::NotifyActorBeginOverlap(AActor* OtherActor)
