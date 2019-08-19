@@ -2,9 +2,10 @@ Create a C++ actor class
 Explaing header and cpp files.
 add UE_LOG to BeginPlay
 Show displaying location in UE_LOG. (using FString)
+  FString Loc = GetActorLocation().ToString();
 Try on Tick
 
-Show SetActorLocation() 
+<b>Show SetActorLocation()</b> 
 Try SetActorLocation() on Tick so that actor drifts to the air.
 
 Show the C++ actor added as Blueprint actor.
