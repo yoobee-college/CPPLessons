@@ -7,15 +7,18 @@ Then create a box collision in it through cpp.
 Add following to the Header file (Under protected).
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
-	UBoxComponent* OverlapComp;
-
+	UBoxComponent* OverlapComp; 
+	
+forward decleration required.
+	
+	class UBoxComponent;
 
 
 Now go to header file and add the following 
 	
 	#include "Components/BoxComponent.h"
 
-Then go to the constructor and add the following
+Then go to the cpp file and in constructor add the following
 
 	OverlapComp = CreateDefaultSubobject<UBoxComponent>(TEXT("OverlapComp"));	// create the box
 	OverlapComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);			// set collision on spatial queries (raycasts, sweeps, and overlaps).
@@ -24,23 +27,40 @@ Then go to the constructor and add the following
 	OverlapComp->SetBoxExtent(FVector(200.0f));					//
 	RootComponent = OverlapComp;							// Making it root component
 
-Now we need an event for overlap detection. Alternative to actor notifybeginoverlap is
-add the following
+Now we need an event for overlap detection. Alternative to the way we did in actornotifybeginoverlap used in ObjectiveActor is as follows
 
-	OverlapComp->OnComponentBeginOverlap.AddDynamics(this, &AFPSExtractionZone::HandleOverlap); //HandleOverlap is a function that is not yet declared.
+we are going to bind specifically to 'OnComponentBeginOverlap' method. Type the following
 
-HandleOverlap function is not declared. So declare the function in header file as follows.
+	OverlapComp->OnComponentBeginOverlap.AddDynamics(this, &AFPSExtractionZone::HandleOverlap); (intellisence will not work at this point)  HandleOverlap function is not yet declared.So declare the function in header file as follows.
+	 
+	UFUNCTION()
+	void HandleOverlap();
+Function requires some parameters. To get it do the following.
 
+Right click on 'OnComponentBeginOverlap' and go to definition. you will be taken to 'PremitiveComponent.h' to the following line of code
+	FComponentBeginOverlapSignature OnComponentBeginOverlap;
+Right click on 'FComponentBeginOverlapSignature' and go to definition. You will be taken to the following line in the same file.
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_SixParams( FComponentBeginOverlapSignature, UPrimitiveComponent*, OverlappedComponent, AActor*, OtherActor, UPrimitiveComponent*, OtherComp, int32, OtherBodyIndex, bool, bFromSweep, const FHitResult &, SweepResult);
+
+We need to copy the parameters in that method and paste it in the decleration of HandleOverlap function (remove the commas)
+The final HandleOverlap function should look like this.
+	 
 	UFUNCTION()
 	void HandleOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
-
-the parametes can be found from the defenition of OnComponentBeginOverlap in the premitivecomponents.h file. (right click and go to OnComponentBeginOverlap definitions. it will open premitivecomponents.h file) (remove the commas)
 
 now in the cpp file create the new definitions of function HandleOverlap as follows(just to see the function work at the moment)
 	void AFPSExtractionZone::HandleOverlap(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 	{
 		UE_LOG(LogTemp, Log, TEXT("Overlapped with extraction zone"));
 	}
+
+In the Editor add the FPSExtractionBox in the world and play and go over it to see the message in output log.
+
+can add the following in constructor to see the box while playing;
+	
+	OverlapComp->SetHiddenInGame(false);
+
+
 
 
 

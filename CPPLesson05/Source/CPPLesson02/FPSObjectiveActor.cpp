@@ -56,6 +56,5 @@ void AFPSObjectiveActor::NotifyActorBeginOverlap(AActor* OtherActor)
 void AFPSObjectiveActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
