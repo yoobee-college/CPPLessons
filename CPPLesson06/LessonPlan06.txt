@@ -1,0 +1,3 @@
+Now we need to extract the carrying object.
+
+in the Extractionzone cpp file in the overlap method do the following

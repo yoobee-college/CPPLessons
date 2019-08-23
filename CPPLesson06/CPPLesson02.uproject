@@ -1,0 +1,16 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{3ADDA315-4B5C-F4C2-5D1E-CB916A4F6EC2}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "CPPLesson02",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine"
+			]
+		}
+	]
+}

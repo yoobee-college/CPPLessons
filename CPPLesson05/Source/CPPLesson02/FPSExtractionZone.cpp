@@ -7,17 +7,17 @@
 // Sets default values
 AFPSExtractionZone::AFPSExtractionZone()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	OverlapComp = CreateDefaultSubobject<UBoxComponent>(TEXT("OverlapComp"));
-	OverlapComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);		
-	OverlapComp->SetCollisionResponseToAllChannels(ECR_Ignore);			
-	OverlapComp->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);		
-	OverlapComp->SetBoxExtent(FVector(200.0f));					
+	OverlapComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	OverlapComp->SetCollisionResponseToAllChannels(ECR_Ignore);
+	OverlapComp->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+	OverlapComp->SetBoxExtent(FVector(200.0f));
 	RootComponent = OverlapComp;
 
-	OverlapComp->OnComponentBeginOverlap.AddDynamic(this,&AFPSExtractionZone::HandleOverlap);
+	OverlapComp->OnComponentBeginOverlap.AddDynamic(this, &AFPSExtractionZone::HandleOverlap);
 
 	OverlapComp->SetHiddenInGame(false);
 }
@@ -26,7 +26,7 @@ AFPSExtractionZone::AFPSExtractionZone()
 void AFPSExtractionZone::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 void AFPSExtractionZone::HandleOverlap(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
