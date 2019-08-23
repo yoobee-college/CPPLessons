@@ -3,13 +3,12 @@
 
 #include "FPSExtractionZone.h"
 #include "CPPLesson02Character.h"
-#include "Components/BoxComponent.h"
+#include "CPPLesson02GameMode.h"
+#include "Components/BoxComponent.h"	
 
 // Sets default values
 AFPSExtractionZone::AFPSExtractionZone()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
 
 	OverlapComp = CreateDefaultSubobject<UBoxComponent>(TEXT("OverlapComp"));
 	OverlapComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
@@ -35,15 +34,14 @@ void AFPSExtractionZone::HandleOverlap(UPrimitiveComponent * OverlappedComponent
 	UE_LOG(LogTemp, Warning, TEXT("Overlapped with extraction zone"));
 
 	ACPPLesson02Character* MyPawn = Cast<ACPPLesson02Character>(OtherActor);
-	if (MyPawn && MyPawn->bIsCarryingObjective)
-	{
 
+	if (MyPawn != nullptr && MyPawn->bIsCarryingObjective)
+	{
+		ACPPLesson02GameMode* GM = Cast<ACPPLesson02GameMode>(GetWorld()->GetAuthGameMode());
+		if (GM)
+		{
+			GM->CompleteMission(MyPawn);
+		}
 	}
 }
 
-// Called every frame
-void AFPSExtractionZone::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}

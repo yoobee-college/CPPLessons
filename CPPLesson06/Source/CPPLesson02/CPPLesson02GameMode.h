@@ -14,8 +14,10 @@ class ACPPLesson02GameMode : public AGameModeBase
 public:
 	ACPPLesson02GameMode();
 
+	void CompleteMission(APawn* InstigatorPawn);
+
 	UFUNCTION(BlueprintImplementableEvent, Category = "GameMode")
-	void MissionCompleted(APawn* InstigatorPawn);
+	void OnMissionCompleted(APawn* InstigatorPawn);
 };
 
 

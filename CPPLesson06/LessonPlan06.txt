@@ -1,3 +1,74 @@
-Now we need to extract the carrying object.
+Now we need some game play logic in extraction. not just a text.
+We will use the boolean in character to do the check if character is carrying the objective or not.
+So in the overlap method of the FPSExtractionZone. do the following.
 
-in the Extractionzone cpp file in the overlap method do the following
+	ACPPLesson02Character* MyPawn = Cast<ACPPLesson02Character>(OtherActor); 
+
+We are creating a variable MyPawn and casting to it the character and getting the value in otherActor
+
+we need to #include "ACPPLesson02Character.h"
+
+Now we need to check if the variable MyPawn and the boolean in it is 'ture' To get that do  the following.
+
+	if (MyPawn != nullptr && MyPawn->bIsCarryingObjective)
+	{
+
+	}
+
+We need to disable the input if the condition is true. But we will do that in GameMode.
+So go to GameMode.h and add this method.
+
+	void CompleteMission(APawn* InstigatorPawn);
+
+and do the definition in cpp file.
+
+void ACPPLesson02GameMode::CompleteMission(APawn* InstigatorPawn)
+{
+	if (InstigatorPawn)
+	{
+		InstigatorPawn->DisableInput(nullptr);
+	}
+}
+
+argument passed to the method can be pointer to the player controller or a null pointer. if nullpointer is passed any pawn will be disbled. 
+
+We can do some extra logic in BP. For that add another function in game mode header file as follows.
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "GameMode")
+	void OnMissionCompleted(APawn* InstigatorPawn);
+
+and we call the function in completeMission method we created earlier after the if condition.
+
+	OnMissionCompleted(InstigatorPawn);
+
+This function is exposed to BP. There will be no implementation in cpp. It will be in BP.
+
+Now we need to call this function from ExtractionZone.cpp. To do that add the following code in the if condition of the handleoverlap function. 
+Final script in handle overlap function will be like the following.
+
+void AFPSExtractionZone::HandleOverlap(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Overlapped with extraction zone"));
+
+	ACPPLesson02Character* MyPawn = Cast<ACPPLesson02Character>(OtherActor);
+
+	if (MyPawn != nullptr && MyPawn->bIsCarryingObjective)
+	{
+		ACPPLesson02GameMode* GM = Cast<ACPPLesson02GameMode>(GetWorld()->GetAuthGameMode());
+		if (GM)
+		{
+			GM->CompleteMission(MyPawn);
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+

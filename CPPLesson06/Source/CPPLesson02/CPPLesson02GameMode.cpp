@@ -16,10 +16,11 @@ ACPPLesson02GameMode::ACPPLesson02GameMode()
 	HUDClass = ACPPLesson02HUD::StaticClass();
 }
 
-void ACPPLesson02GameMode::MissionCompleted(APawn * InstigatorPawn)
+void ACPPLesson02GameMode::CompleteMission(APawn* InstigatorPawn)
 {
 	if (InstigatorPawn)
 	{
 		InstigatorPawn->DisableInput(nullptr);
 	}
+	OnMissionCompleted(InstigatorPawn);
 }
