@@ -62,6 +62,137 @@ void AFPSExtractionZone::HandleOverlap(UPrimitiveComponent * OverlappedComponent
 	}
 }
 
+Now lets show some on screen messages for extraction zone. 
+We will give that in the BP of GameMode.
+So go to BPGmmeMode event graph.
+Right click and search OnMissionCompleted. (the function that we created in GameMode.h file)
+Before we do anything we need another widget to show the text
+SO create another widget named "Game Over"
+On design tab just add a text that says "Mission Completed"
+Save and exit.
+Go to GameMode BP and add blueprint to create widget and add to view port.
+
+Now when you play it should be working.
+
+Now we need to give a sound when player enters extraction zone without objective.
+So go to extractionZone header file and add the USoundBase pointer like the following
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Sounds")
+		USoundBase* ObjectiveMissingSound;
+
+Now go to the Extraction Zone cpp file and add another if statement to return if pointer is nullptr. as follows
+
+	if (MyPawn == nullptr)
+	{
+		return;
+	}
+
+Add an else to current if statement to play sound.
+add the following to the else part
+	
+	UGameplayStatics::PlaySound2D(this, ObjectiveMissingSound);
+
+final if statement will look like this
+
+	if (MyPawn->bIsCarryingObjective)
+	{
+		ACPPLesson02GameMode* GM = Cast<ACPPLesson02GameMode>(GetWorld()->GetAuthGameMode());
+		if (GM)
+		{
+			GM->CompleteMission(MyPawn);
+		}
+	}
+	else
+	{
+		UGameplayStatics::PlaySound2D(this, ObjectiveMissingSound, 0.2f, 0.2f);
+	}
+
+now go to the FPSExtractionZone BP and add a sound in the defaults. (this was made by the UPROPERTY we added in header file of extraction zone.)
+Game should play the sound when entering extraction zone without carrying objective.
+(Make sure we have added a blueprint version of the extraction zone in the level.)
+
+Now another game play logic. That when game finishes camera moves from first person view to third person view.
+
+show a prototype in BP
+Add a camera that focus on entire level and convert it to a bp. 
+In GameMode on Mission complete event add a sequence node add the bp as in the image in folder. 
+Prototyping is done now lets try that in cpp
+
+First we need to get the playercontroller. (looking at bp and decided)
+To get player controller do the following
+	
+	APlayerController* PC = Cast<APlayerController>(InstigatorPawn->GetController());
+
+Now we need to SetViewTargetWithBlend to player controller. (similar function used in bp)
+So do as following
+
+	PC->SetViewTargetWithBlend(NewViewTarget, 5.0f, EViewTargetBlendFunction::VTBlend_Cubic);
+
+' NewViewTarget ' is an actor variable which is not declared at this point.
+
+So lets declare it as a pointer to actor before the if as follows
+
+	AActor* NewViewTarget;
+
+To get a value in to the NewViewTarget in the previous statement we need to get all actors of class "Spectatorviewpoint" (class we created in editor with camera in it.) And get its first value just like we did in BP.
+Following is the function.
+	UGameplayStatics::GetAllActorsOfClass(arg1, arg2, arg3); 
+Check the documentation (https://docs.unrealengine.com/en-US/API/Runtime/Engine/Kismet/UGameplayStatics/GetAllActorsOfClass/index.html)
+For that first we need to create a variable called SpectatingCameraClass in header file.
+We also need to expose it to BP as well. 
+For that do the following.
+
+	UPROPERTY(EditDefaultsOnly, Category = "Spectating")
+	TSubclassOf<AActor> SpectatingCameraClass;
+
+We expose it to variable so that we can select a class in the editor.
+Now we need to create an array of actors that will be returned in the function UGameplayStatics::GetAllActorsOfClass
+For that do the following in cpp file.
+
+	TArray<AActor*> ReturnedActors;
+
+We created and array and now we can use these variables to call the function "GetAllActorsOfClass" 
+Following is the final function call
+
+	UGameplayStatics::GetAllActorsOfClass(this, SpectatingCameraClass, ReturnedActors);
+
+ReturnedActors is an array and the first element will have the class with camera which is going to be our target ("NewViewTarget" variable).
+
+	NewViewTarget = ReturnedActors[0];
+
+The final finished code in MissionComplete function is as follows.
+void ACPPLesson02GameMode::CompleteMission(APawn* InstigatorPawn)
+{
+	if (InstigatorPawn)
+	{
+		InstigatorPawn->DisableInput(nullptr);
+		AActor* NewViewTarget;
+		TArray<AActor*> ReturnedActors;
+		UGameplayStatics::GetAllActorsOfClass(this, SpectatingCameraClass, ReturnedActors);
+
+		NewViewTarget = ReturnedActors[0];
+		APlayerController* PC = Cast<APlayerController>(InstigatorPawn->GetController());
+
+		PC->SetViewTargetWithBlend(NewViewTarget, 5.0f, EViewTargetBlendFunction::VTBlend_Cubic);
+	}
+
+
+	OnMissionCompleted(InstigatorPawn);
+}
+
+Can show the best practice of checking each pointers.
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
