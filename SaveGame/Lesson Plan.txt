@@ -1,0 +1,33 @@
+Save Game
+
+We are going to save the bullet count and health value and then load it in to game when game starts.
+
+Download the example file.
+
+Create BP for save and load game for the buttons in P key.
+
+
+LoadGameFromSlot, CreateSaveGameObject, SaveGameToSlot.
+
+Refer Image
+
+Now try the Structure class (Under blueprints)
+
+Create a structure and add bullet, health and Player name variables added to it.
+
+In Player Save class create a variable of the previous struct type.
+
+create a local variable of struct in widget.
+
+Then like usual 
+To save game
+Set members of struct first  and then save struct to save game.
+
+To load game
+Load game from slot first 
+Then cast to save game class 
+Get the struct from the cast
+and Get info from the struct 
+
+Refer the images. 
+
