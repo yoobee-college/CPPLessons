@@ -1,0 +1,9 @@
+donwload the template for implementing BP interface
+It should have 3 weapons and widgets ready.
+
+create Bp interface.
+Create 3 functions in BP interface (KnifePickup, HandGunPickup, RiflePickup)
+Add BPInterface to class settings of character
+On Each actor OnBeginOverlap send appropriate Interface Message
+On character  add event for each actor.
+
