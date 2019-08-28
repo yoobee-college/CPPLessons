@@ -1,0 +1,55 @@
+Decals.
+Show from documentation
+Can be artefacts on the game. Bullet holes or Blood splatter4
+We can also add it to make textures
+
+We will be creating a bullet hole for FirstPerson shooter.
+
+So open the FPS project.
+
+Add a decal actor and explain the direction.
+
+Download a stain texture and create a material with it.
+
+select material and change material domain to deferred decal and blend mode to transcelucent
+
+hook up RGB to emisive and Alpha to opacity
+
+This will be slightly translosant. If we want it not translusant then 
+
+Select the material root node
+Change decal blend mode to "DBuffer Translucent Colory,Normal,Roughness" This will make lighting in scene affect decal.
+and connect RGB to Base Colour
+
+reduce the scale to avoid strect on sides.
+
+Now creating bullet holes
+
+Import a PNG image. 
+
+Show how to check Alpha map
+
+Create a materia with that texture
+
+On material do as before 
+select material and change material domain to deferred decal 
+Blend mode to translucent
+Change decal blend mode to "DBuffer Translucent Colory,Normal,Roughness"
+
+
+on event hit on the projectile
+
+add function Spawn decal at location
+Location is hit location
+Rotation is "make rot from X" from hit location.
+Size should be 10 or higher.
+
+If the hit object is moving.
+after spawn decal attach to component. and the parent is the other component from hit event.
+Set location rule rotation rule and size rule to "Keep world".
+
+
+
+
+
+
