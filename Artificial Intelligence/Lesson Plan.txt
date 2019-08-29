@@ -1,0 +1,63 @@
+AI
+https://www.youtube.com/watch?v=zNJEvAGiw7w&list=PL4G2bSPE_8ukuajpXPlAE47Yez7EAyKMu
+
+Create a Third person template.
+Create AI folder
+Create a new character (Name in AI Enemy)
+Open it add skeleton mesh (Maniquen)
+Add animation BP
+Create a new AIController (From blueprint class)
+Create Behaviiour Tree and BlackBoard
+Select AI controller in enemy character defaults
+In AI Enemy character begin play add BP runbehaviour tree
+Open Behaviour Tree (it is a decision making tree)
+Drag from root and pick selector and then sequence and another sequence
+	Selector selects  and sequence play in sequence
+	Explain numbers
+Drag enemy into level.
+Drag in nav mesh bound volume in to scene(scale and hit p to show)
+Back to Behaviour tree.
+Create new task
+In BlackBoard create a new key of type Vector and name it ActorLocation
+create Execute event and finish execute 
+Create new variable of type BlackboardKeySelector Name it Vector.
+Set Variable to be public
+Rename the task to a logical name 
+Compile and the character should run to Random locations in the level.
+To avoid snap roation of the character do the following 
+	In class defaults - Uncheck "Use Controller Rotation Yaw"
+	In CharacterMovement - Check "Orient Rotation to Movement" 
+	
+We can rename the Sequence to "Go to Random Location"
+
+Create another sequence Chase Player.
+Create new Task.
+Add Event Receive Execute AI and Finish Execute
+Create a variable of type blackboard key selector
+Set the variable as before in the task Fig05
+Rename the task in content browser 
+Add the task in Behaviour Tree under new sequence Fig06
+To decide if the enemy has found the player we need a boolean (to switch between 2 sequences)
+For that create a boolean Blackboard "CanSeePlayer"
+Now we will give the sequences a decorator. (which decides if we want to go to the sequence)
+Rightclick on "Go to Random Loc" sequence and go to Add Decorator and select Blackboard.
+	A blue decorator will appear on the sequence 
+Select it and in details panel change Key Query to "is not set" and Blackboard Key to "can see player"
+	Basically it says if blackboard key "can see player" is not set, only then do the sequence.
+We can rename the decorator.
+Add snother decorator on the other sequence and set the opposit to the cant see decorator. Fig07
+Now we need to set the boolean
+For that go to AIController and add a component AIPerception
+Select the AIPerception and
+Add a senses config
+Change category to AI Sight Config
+Open it and check all in Detections by affiliation Fig08
+Now go to Player Character and add "AIPerceptionStimuliSource" component.
+Go to its details and check auto register as source
+Add array element
+and select AISense_Sight in array element Fig09
+Now Go to AIPlayerController and select AIPerception and right click and search "OnTargetPerceptionUpdate" then add the following BPs 
+Fig10
+
+
+
